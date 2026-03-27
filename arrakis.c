@@ -120,14 +120,15 @@ int contar_casas(Casa *cualquiera)
 void insertar_casa(Casa **anillo, Casa *nueva)
 {
     /* ESCRIBE TU CODIGO AQUI */
-    Casa *p = *anillo -> siguiente;
+    Casa *p;
     
     if (*anillo == NULL) {
         *anillo = nueva;
         nueva -> siguiente = nueva;
         return;
     }
-    
+    p = (*anillo) -> siguiente;
+
     nueva -> siguiente = *anillo;
 
     while ((p!=NULL) && (p!=*anillo)) {
@@ -150,7 +151,7 @@ void insertar_casa(Casa **anillo, Casa *nueva)
 Casa *avanzar_gusano(Casa *actual, int pasos)
 {
     
-    for (int i= pasos, i > 0, i --) {
+    for (int i= pasos; i > 0; i --) {
         if (actual->siguiente == NULL) break;
         actual = actual->siguiente;
     }
@@ -178,34 +179,33 @@ Casa *avanzar_gusano(Casa *actual, int pasos)
 int atacar_asentamiento(Casa **gusano, Casa **anillo)
 {
     /* ESCRIBE TU CODIGO AQUI */
-    if (*gusano == NULL) return;
+    if (*gusano == NULL) return 0;
     
-    *gusano -> soldados = soldados - soldados * DANIO_PORCENTAJE /100;
+    (*gusano) -> soldados = (*gusano) -> soldados - (*gusano) -> soldados * DANIO_PORCENTAJE /100;
     
     
-    Casa *tmp = *gusano->siguiente;
+    Casa *tmp = (*gusano)->siguiente;
     while ((tmp != *gusano) && (tmp != NULL)) {
         tmp -> especia += ESPECIA_COSECHA;
+	tmp = tmp -> siguiente;
     }
     
-    if (*gusano -> soldados < SOLDADOS_MIN) {
-        tmp = *gusano -> siguiente;
+    if ((*gusano) -> soldados < SOLDADOS_MIN) {
+        tmp = (*gusano) -> siguiente;
         while ((tmp != *gusano) && (tmp != NULL)) {
             if (tmp -> siguiente == *gusano) {
-                *gusano = *gusano -> siguiente;
+                *gusano = (*gusano) -> siguiente;
                 free(tmp -> siguiente);
                 tmp -> siguiente = *gusano;
                 
-                if (*gusano -> siguiente == *gusano){
+                if ((*gusano) -> siguiente == *gusano){
                     *gusano = NULL;
                 }
                 
                 return 1;
             }
+	    tmp = tmp ->siguiente;
         }
-        
-        
-        
     }
     
     return 0;
@@ -227,20 +227,20 @@ int invocar_refuerzos(Casa *actual, Casa **anillo)
 {
     /* ESCRIBE TU CODIGO AQUI */
     if (actual -> especia < ESPECIA_REFUERZOS) return 0;
-    
+    actual -> especia = 0;
     Casa *tmp = actual -> siguiente, *nueva;
-    char nombre[MAX_NOMBRE] = actual -> nombre;
+    char nombre[MAX_NOMBRE];
+    strcpy(nombre, actual -> nombre);
     while ((tmp!=NULL)&&(tmp!=actual)){
         if (tmp -> siguiente == actual) break;
+	tmp = tmp -> siguiente;
     }
-    tmp -> siguiente = nueva;
-    nueva->siguiente = actual;
-    nueva->soldados = 250;
-    nueva->especia = 0;
+
+    
     strcat(nombre, "II");
-    nueva->nombre = nombre;
-    
-    
+    nueva = crear_casa(nombre, 250);
+    tmp -> siguiente = nueva;
+    nueva -> siguiente = actual;
     return 1;
 }
 
