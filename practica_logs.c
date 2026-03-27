@@ -94,7 +94,12 @@ void liberar_lista(ErrorLog *cabeza)
  */
 void insertar_ordenado(ErrorLog **cabeza, ErrorLog *nuevo)
 {
-    /* ESCRIBE TU CODIGO AQUI */
+   Errorlog *auxiliar;
+   char letra;
+   nuevo=*cabeza;
+   letra= *nuevo.id;
+
+   while(letra>=
 }
 
 /*
@@ -104,8 +109,16 @@ void insertar_ordenado(ErrorLog **cabeza, ErrorLog *nuevo)
  */
 int contar_criticos(ErrorLog *cabeza)
 {
-    /* ESCRIBE TU CODIGO AQUI */
-    return 0;
+	ErrorLog *nuevo;
+	int criticos=0;
+	nuevo.es_critico=cabeza.es_critico;
+	while(nuevo != NULL){
+		if(nuevo.es_critico==1){
+			criticos++;
+		}
+		nuevo=cabeza.siguiente;
+	}	
+    return criticos;
 }
 
 /*
@@ -115,8 +128,16 @@ int contar_criticos(ErrorLog *cabeza)
  */
 int contar_no_criticos(ErrorLog *cabeza)
 {
-    /* ESCRIBE TU CODIGO AQUI */
-    return 0;
+    ErrorLog *nuevo;     
+        int nocriticos=0;
+        nuevo.es_critico=cabeza.es_critico;
+        while(nuevo != NULL){
+                if(nuevo.es_critico==0){
+                        criticos++;
+                }   
+                nuevo=cabeza.siguiente;               
+        }
+    return nocriticos;
 }
 
 /*
@@ -186,6 +207,7 @@ int main(void)
     printf("\nEstadisticas:\n");
     printf("  Errores criticos    (A-E): %d\n", contar_criticos(lista));
     printf("  Errores no criticos (F-Z): %d\n", contar_no_criticos(lista));
+    total_errores=contar_criticos(lista)+contar_no_criticos(lista);
     printf("  Total:                     %d\n", total_errores);
 
     /* Filtrar errores de baja prioridad */
