@@ -120,6 +120,15 @@ int contar_casas(Casa *cualquiera)
 void insertar_casa(Casa **anillo, Casa *nueva)
 {
     /* ESCRIBE TU CODIGO AQUI */
+    Casa *p;
+    
+    if (*anillo == NULL) {
+        *anillo = nueva;
+        return;
+    }
+    
+    
+    
 }
 
 /*
@@ -133,7 +142,12 @@ void insertar_casa(Casa **anillo, Casa *nueva)
  */
 Casa *avanzar_gusano(Casa *actual, int pasos)
 {
-    /* ESCRIBE TU CODIGO AQUI */
+    
+    for (int i= pasos, i > 0, i --) {
+        if (actual->siguiente == NULL) break;
+        actual = actual->siguiente;
+    }
+    
     return actual;
 }
 
@@ -157,6 +171,36 @@ Casa *avanzar_gusano(Casa *actual, int pasos)
 int atacar_asentamiento(Casa **gusano, Casa **anillo)
 {
     /* ESCRIBE TU CODIGO AQUI */
+    if (*gusano == NULL) return;
+    
+    *gusano -> soldados = soldados - soldados * DANIO_PORCENTAJE /100;
+    
+    
+    Casa *tmp = *gusano->siguiente;
+    while ((tmp != *gusano) && (tmp != NULL)) {
+        tmp -> especia += ESPECIA_COSECHA;
+    }
+    
+    if (*gusano -> soldados < 50) {
+        tmp = *gusano -> siguiente;
+        while ((tmp != *gusano) && (tmp != NULL)) {
+            if (tmp -> siguiente == *gusano) {
+                *gusano = *gusano -> siguiente;
+                free(tmp -> siguiente);
+                tmp -> siguiente = *gusano;
+                
+                if (*gusano -> siguiente == *gusano){
+                    *gusano = NULL;
+                }
+                
+                return 1;
+            }
+        }
+        
+        
+        
+    }
+    
     return 0;
 }
 
